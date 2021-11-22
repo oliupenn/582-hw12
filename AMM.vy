@@ -61,5 +61,5 @@ def tradeTokens(sell_token: address, sell_quantity: uint256):
 def ownerWithdraw():
 	assert self.owner == msg.sender
 	self.tokenA.transfer(msg.sender, self.tokenA.totalSupply())
-	self.tokenB.transfer(msg.sender, self.tokenBQty.totalSupply())
+	self.tokenB.transfer(msg.sender, self.tokenB.totalSupply())
 	selfdestruct(self.owner)
