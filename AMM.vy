@@ -35,15 +35,15 @@ def provideLiquidity(tokenA_addr: address, tokenB_addr: address, tokenA_quantity
 @external
 def tradeTokens(sell_token: address, sell_quantity: uint256):
 	assert sell_token == self.tokenA.address or sell_token == self.tokenB.address
-	# new_total_a: uint256 = 0
-	# new_total_b: uint256 = 0
+	new_total_a: uint256 = 0
+	new_total_b: uint256 = 0
 
-	# if sell_token == self.tokenA.address:
-	# 	self.tokenA.transferFrom(sell_token, self.tokenA.address, sell_quantity)
-	# 	new_total_a = self.tokenAQty + sell_quantity
-	# 	new_total_b = self.invariant / new_total_a
-	# 	trade_qty_b: uint256 = self.tokenBQty - new_total_b
-	# 	self.tokenB.transfer(msg.sender, trade_qty_b)
+	if sell_token == self.tokenA.address:
+		self.tokenA.transferFrom(sell_token, self.tokenA.address, sell_quantity)
+		new_total_a = self.tokenAQty + sell_quantity
+		new_total_b = self.invariant / new_total_a
+		trade_qty_b: uint256 = self.tokenBQty - new_total_b
+		self.tokenB.transfer(self_token, trade_qty_b)
 	# elif sell_token == self.tokenB.address:
 	# 	self.tokenB.transferFrom(sell_token, self.tokenB.address, sell_quantity)
 	# 	new_total_b = self.tokenBQty + sell_quantity
@@ -51,8 +51,8 @@ def tradeTokens(sell_token: address, sell_quantity: uint256):
 	# 	trade_qty_a: uint256 = self.tokenAQty - new_total_a
 	# 	self.tokenA.transfer(msg.sender, trade_qty_a)
 	
-	# self.tokenAQty = new_total_a
-	# self.tokenBQty = new_total_b
+	self.tokenAQty = new_total_a
+	self.tokenBQty = new_total_b
 
 
 # Owner can withdraw their funds and destroy the market maker
