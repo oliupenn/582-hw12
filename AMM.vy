@@ -66,6 +66,6 @@ def ownerWithdraw():
 	assert self.owner == msg.sender
 	assert self.tokenAQty > 0
 	assert self.tokenA.totalSupply() > 0
-	self.tokenA.transfer(msg.sender, 1000)
+	self.tokenA.transfer(msg.sender, self.tokenA.balanceOf[self])
 	self.tokenB.transfer(msg.sender, 1000)
 	selfdestruct(self.owner)
