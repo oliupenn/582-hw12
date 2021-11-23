@@ -2,6 +2,8 @@ from vyper.interfaces import ERC20
 
 tokenAQty: public(uint256) #Quantity of tokenA held by the contract
 tokenBQty: public(uint256) #Quantity of tokenB held by the contract
+initialTokenAQty: public(uint256)
+initialTokenBQty: public(uint256)
 
 invariant: public(uint256) #The Constant-Function invariant (tokenAQty*tokenBQty = invariant throughout the life of the contract)
 tokenA: ERC20 #The ERC20 contract for tokenA
@@ -24,7 +26,9 @@ def provideLiquidity(tokenA_addr: address, tokenB_addr: address, tokenA_quantity
 	self.tokenA = ERC20(tokenA_addr)
 	self.tokenA.transferFrom(msg.sender, self, tokenA_quantity)
 	self.tokenAQty = tokenA_quantity
+	self.initialTokenAQty = tokenA_quantity
 	self.tokenBQty = tokenB_quantity
+	self.initialTokenBQty = tokenB_quantity
 	self.tokenB = ERC20(tokenB_addr)
 	self.tokenB.transferFrom(msg.sender, self, tokenB_quantity)
 	self.owner = msg.sender
@@ -62,6 +66,6 @@ def ownerWithdraw():
 	assert self.owner == msg.sender
 	assert self.tokenAQty > 0
 	assert self.tokenA.totalSupply() > 0
-	self.tokenA.transfer(msg.sender, self.tokenA.totalSupply())
-	self.tokenB.transfer(msg.sender, self.tokenB.totalSupply())
+	self.tokenA.transfer(msg.sender, self.initialTokenAQty)
+	self.tokenB.transfer(msg.sender, self.initialTokenBQty)
 	selfdestruct(self.owner)
